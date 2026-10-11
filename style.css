@@ -3,3 +3,6 @@
 
 /* Connected ideas: preserve the original 350px desktop graphic footprint. */
 .hero-art{height:350px;min-width:0;display:flex;align-items:center;justify-content:center}.hero-art img{display:block;width:350px;height:350px;max-width:100%;object-fit:contain;mix-blend-mode:multiply}@media(max-width:850px){.hero-art{display:none}}
+
+/* Homepage navigation: match the Local Intelligence section. */
+body:has(> main#main)>.nav{background:var(--navy);color:#fff;border-bottom-color:#35475c;max-width:none;padding-left:max(32px,calc((100% - 1180px)/2));padding-right:max(32px,calc((100% - 1180px)/2))}body:has(> main#main)>.nav .brand span{color:#adbdce}body:has(> main#main)>.nav .login{background:transparent;color:#fff;border-color:#52647a}@media(max-width:620px){body:has(> main#main)>.nav{padding-left:20px;padding-right:20px}}
