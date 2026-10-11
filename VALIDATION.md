@@ -22,3 +22,8 @@ This is a separate website release, not a new Nexus desktop application version.
 Run browser tests with `node --test tests/website.test.cjs` from this repository.
 Node 22+ and Chrome are required. Set CHROME_PATH if Chrome is installed elsewhere.
 Browser screenshots are written to the system temporary folder.
+
+October 11 update: removed the model-space estimate from the FAQ and the dynamic
+installer-size display from authenticated downloads. Added a releases.js cache
+version. All three existing website test groups passed, including Chrome browser
+flows. Desktop automatic/manual Ollama setup is a separate source change.
