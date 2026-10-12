@@ -27,3 +27,13 @@ October 11 update: removed the model-space estimate from the FAQ and the dynamic
 installer-size display from authenticated downloads. Added a releases.js cache
 version. All three existing website test groups passed, including Chrome browser
 flows. Desktop automatic/manual Ollama setup is a separate source change.
+
+October 11 update: added Tables and Code product preview tabs immediately after
+Notes, which remains the initial selection. Tables includes an example and
+instructions for `/table`, cell navigation, row/column menus and formatting.
+Code includes a highlighted JavaScript example and instructions for `/code`,
+automatic language detection, the language selector, indentation and copying.
+Descriptions were checked against the installed Nexus editor implementation.
+All three website test groups passed in Chrome/Node, including the six-tab order,
+initial Notes selection, new content, keyboard navigation and mobile overflow.
+This changes the website only; it does not produce a desktop application build.
