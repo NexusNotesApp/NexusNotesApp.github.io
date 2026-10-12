@@ -1,5 +1,14 @@
 # Website validation — October 11, 2026 (America/Chicago)
 
+October 12, 2026: signup account links now display the noninteractive prompt
+“Already have an account?” followed by an underlined “Log in” action. “Forgot
+password?” is on its own line below. Login/reset mode controls retain their
+existing behavior. Account-page CSS/auth script URLs include a cache version so
+the markup and script deploy together. Three existing Node/Chrome test groups
+passed with mocked authentication, including additional desktop/mobile layout
+checks and screenshots. No real accounts, email, saved sessions, desktop data or
+database schema were changed.
+
 This is a separate website release, not a new Nexus desktop application version.
 
 * Published to https://nexusnotesapp.github.io/ from the dedicated website repository.
