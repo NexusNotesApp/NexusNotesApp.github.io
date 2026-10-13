@@ -7,3 +7,6 @@
 
 /* Homepage navigation: match the Local Intelligence section. */
 .nav.home-nav{background:var(--navy);color:#fff;border-bottom-color:#35475c;max-width:none;padding-left:max(32px,calc((100% - 1180px)/2));padding-right:max(32px,calc((100% - 1180px)/2))}.nav.home-nav .brand span{color:#adbdce}.nav.home-nav .login{background:transparent;color:#fff;border-color:#52647a}@media(max-width:620px){.nav.home-nav{padding-left:20px;padding-right:20px}}
+
+/* Give the homepage tagline a little more prominence. */
+.hero-copy > .eyebrow{font-size:14px}
