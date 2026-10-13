@@ -1,62 +1,63 @@
-# Nexus Notes test website
+# Nexus Notes website
 
-Static GitHub Pages site for https://nexusnotesapp.github.io/.
-Publish the contents of this directory as the root of the separate public
-`NexusNotesApp/NexusNotesApp.github.io` repository. Do not publish the desktop
-source repository. The included workflow deploys on pushes to `main`.
+Static GitHub Pages website: https://nexus-notes.net/.
+Publish this directory to the separate NexusNotesApp/NexusNotesApp.github.io
+repository. Do not publish the desktop source repository.
 
-## Hosting setup
+## Firebase setup
 
-1. Create the public repository `NexusNotesApp.github.io` in the NexusNotesApp organization.
-2. Push this directory's contents to that repository's `main` branch.
-3. In that repository, Settings → Pages → Build and deployment → Source:
-   select **GitHub Actions**. Run the Publish Nexus Notes website workflow.
-4. In Supabase project `jdujgubrrdsibqahnviz`, Authentication → URL Configuration:
-   set Site URL to `https://nexusnotesapp.github.io/` and add these Redirect URLs:
-   * `https://nexusnotesapp.github.io/downloads.html`
-   * `https://nexusnotesapp.github.io/account.html`
-5. Keep email/password sign-in and email confirmation enabled. In the Confirm
-   signup email template keep `{{ .ConfirmationURL }}` as the confirmation link.
-   The website passes downloads.html as the post-confirmation destination.
-6. Configure Authentication → Email → SMTP with an email provider before public
-   registration testing. Supabase's default mail service only sends to project
-   team email addresses and has a low rate limit. See
-   https://supabase.com/docs/guides/auth/auth-smtp.
-7. Test real sign-up, confirmation, sign-in, sign-out and password recovery with
-   an email address you control. Email delivery and dashboard configuration
-   cannot be verified using the public publishable key alone.
+Project: nexus-notes-9f146. Website accounts use Firebase Authentication only.
+No Firestore, Analytics, custom SMTP or desktop cloud sync is required.
 
-## Configuration and privacy
+1. Enable Authentication > Sign-in method > Email/Password (not email-link login).
+2. Under Authentication > Settings > Authorized domains add nexus-notes.net.
+   Add nexusnotesapp.github.io only if you use that hostname directly.
+   Add localhost explicitly for local HTTP testing if needed.
+3. Under Authentication > Templates configure both Email address verification
+   and Password reset action URLs to:
+   https://nexus-notes.net/account.html
+   The page handles Firebase mode and oobCode parameters; expired/used links
+   report an error. Do not copy a real one-time code into configuration.
+   The default Firebase-hosted handler also works if you retain it; its Continue
+   link returns to account.html. Test whichever handler you configure.
+4. Enable email enumeration protection and consider an eight-character minimum
+   password policy in Firebase to match the website's signup/reset forms.
+5. Register a fresh Firebase account. The owner's sole Supabase test account and
+   session are not migrated or deleted. Existing Supabase verification/reset
+   links must be replaced with newly requested Firebase emails after cutover.
+6. Test registration, verification, login, logout, password reset and token
+   refresh using an address you control, including on the company network/VPN.
 
-`config.js` contains the public Supabase URL and publishable key supplied by the
-owner. These are intentionally browser-visible. No secret or service-role key
-is needed. Variables in Nexus_Releases are in a different repository; this
-static site does not read them. Update config.js if the public configuration changes.
+config.js contains intentionally public Firebase browser configuration. Never
+put service-account keys or other private credentials in this directory.
+Firebase App and Auth compat SDK 13.0.0 are vendored under vendor/ from Google's
+www.gstatic.com/firebasejs/13.0.0/ distribution; license headers are retained.
+Serving them locally avoids a runtime dependency on the Google SDK CDN.
+Firebase API access still requires identitytoolkit.googleapis.com and
+securetoken.googleapis.com. No Analytics SDK is loaded.
 
-Download links are only rendered after Supabase `getUser()` verifies a session.
-This is a website login gate, not private file hosting: GitHub release assets
-remain public. Use private object storage with server-enforced access policies
-if the installers themselves must become private.
+## Compatibility and access
 
-Windows and Mac releases are selected independently by numeric asset version,
-excluding draft/prerelease releases. `MacOS_v1.0.55` and `Windows_v1.0.55` tags
-are supported. The GitHub API is queried when the signed-in page opens; API
-errors show a retry action rather than a misleading empty download list.
+Desktop databases, paths, backups, notes and attachments are unchanged on Mac
+and Windows. This is a website update, not an application version.
+Firebase sessions are separate from Supabase sessions; sign in again after
+cutover. Downloads require a Firebase account with a verified email address.
+The browser refreshes account information and tokens before showing links.
+GitHub release assets remain public: this is a website login gate, not private
+file hosting or server-enforced installer access control.
 
-The account is for this website; it does not sync desktop notes or create a
-desktop workspace. The website includes no analytics. Google Fonts, GitHub,
-and Supabase receive normal browser requests as described in privacy.html.
+Rollback: restore the previous website files and Supabase configuration.
+Firebase accounts do not automatically exist in Supabase; accounts created after
+cutover would need separate handling. Retain the Supabase project until the
+Firebase flows are verified. This change does not delete either provider's data.
 
-## Local preview
+## Validation and publication
 
-Serve this directory with any static HTTP server, then open index.html. Use
-HTTP on localhost for preview and HTTPS on the published site. Do not test
-authentication from file:// URLs. Local auth testing also requires adding the
-specific localhost callback URLs to Supabase's redirect allowlist.
-
-The test runner in `tests/website.test.cjs` uses Node 22+ and Chrome to serve
-and inspect desktop/mobile pages, login gating, mocked auth flows, release
-selection and error handling. It never creates a real user or sends email.
-
-Supabase browser SDK: vendored @supabase/supabase-js 2.49.1, MIT license.
-Source: https://github.com/supabase/supabase-js.
+Serve over HTTP locally, not file URLs. Run:
+node --test tests/website.test.cjs
+Node 22+ and Chrome are required; CHROME_PATH can select Chrome.
+Tests use isolated browser profiles and mocked authentication; they never create
+real users or send email. Real email delivery and Firebase console configuration
+require separate acceptance testing. See VALIDATION.md for recorded results.
+Publish only the reviewed website changes; the current local homepage also
+contains previously unpublished CSV FAQ copy documented in VALIDATION.md.

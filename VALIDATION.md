@@ -7,7 +7,8 @@ existing behavior. Account-page CSS/auth script URLs include a cache version so
 the markup and script deploy together. Three existing Node/Chrome test groups
 passed with mocked authentication, including additional desktop/mobile layout
 checks and screenshots. No real accounts, email, saved sessions, desktop data or
-database schema were changed.
+database schema were changed. Source is mirrored in the dedicated public website
+checkout for publication; deployment verification is recorded with the task.
 
 This is a separate website release, not a new Nexus desktop application version.
 
@@ -37,12 +38,39 @@ installer-size display from authenticated downloads. Added a releases.js cache
 version. All three existing website test groups passed, including Chrome browser
 flows. Desktop automatic/manual Ollama setup is a separate source change.
 
-October 11 update: added Tables and Code product preview tabs immediately after
-Notes, which remains the initial selection. Tables includes an example and
-instructions for `/table`, cell navigation, row/column menus and formatting.
-Code includes a highlighted JavaScript example and instructions for `/code`,
-automatic language detection, the language selector, indentation and copying.
-Descriptions were checked against the installed Nexus editor implementation.
-All three website test groups passed in Chrome/Node, including the six-tab order,
-initial Notes selection, new content, keyboard navigation and mobile overflow.
-This changes the website only; it does not produce a desktop application build.
+October 12 update: added a homepage FAQ explaining automatic CSV/tab-separated
+table paste, first-row headers, quoted commas, blank cells and plain-text paste.
+Local copy only; not published. Publish this FAQ alongside a verified release
+containing CSV support. The initial automatic approval-review usage block cleared:
+41 focused Flutter tests, five-file analysis and the Windows v1.0.68 release build
+passed. Production packaging/evidence is recorded in the desktop version history.
+No browser suite was rerun for this copy-only change; diff checks passed. The
+website was not published and public release assets were not uploaded here.
+
+
+October 13, 2026 (America/Chicago): website authentication switched to Firebase
+project nexus-notes-9f146. Registration, verification resend, verified-email
+login/download gating, session restoration, logout, password reset requests and
+custom verification/reset action handling are implemented. Firebase App/Auth
+compat SDK 13.0.0 are served locally; Analytics is not loaded.
+
+Three Node/Chrome test groups passed on Windows with mocked Firebase, including
+signup verification destination, failed login, resend, reset completion,
+verification completion, expired reset links, unverified download blocking,
+verified downloads, release errors and desktop/mobile layouts. No real account
+was created or email sent. Actual Mac browser runtime and company-network flows
+remain unverified. Console authorized domains, Email/Password enablement,
+templates and real email delivery require acceptance testing.
+
+The owner's sole Supabase test account is not migrated or deleted; register a
+fresh Firebase account and request fresh links. Desktop application versions,
+local databases, notes, attachments, storage paths and backups are unchanged.
+This is a website change only. Existing Supabase sessions no longer grant website
+access after publication. Rollback restores the previous website/provider;
+new Firebase accounts would need separate handling. Public installers remain
+public on GitHub. Publication status is recorded below when verified.
+
+Firebase public project configuration returned HTTP 200 and confirmed
+nexus-notes.net is authorized (localhost is also present). The actual website
+uses the preserved CNAME nexus-notes.net. Email/Password provider enablement
+and real email delivery are not established by this read-only check.
