@@ -61,3 +61,5 @@ real users or send email. Real email delivery and Firebase console configuration
 require separate acceptance testing. See VALIDATION.md for recorded results.
 Publish only the reviewed website changes; the current local homepage also
 contains previously unpublished CSV FAQ copy documented in VALIDATION.md.
+
+Google sign-in uses the existing Firebase project alongside email/password. Enable Google in Firebase Authentication and retain nexus-notes.net as an authorized domain. Google popup completion requires real-user acceptance.

@@ -10,3 +10,5 @@
 
 /* Give the homepage tagline a little more prominence. */
 .hero-copy > .eyebrow{font-size:14px}
+
+.auth-divider{text-align:center;margin:16px 0 0}.account-card .google-signin{margin-top:8px;background:white;color:var(--ink);border:1px solid var(--line);box-shadow:none}.account-card .google-signin:hover{background:#eef3f8}

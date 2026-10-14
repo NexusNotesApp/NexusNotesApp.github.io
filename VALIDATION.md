@@ -74,3 +74,6 @@ Firebase public project configuration returned HTTP 200 and confirmed
 nexus-notes.net is authorized (localhost is also present). The actual website
 uses the preserved CNAME nexus-notes.net. Email/Password provider enablement
 and real email delivery are not established by this read-only check.
+
+
+October 14, 2026 (America/Chicago): added Continue with Google alongside email/password login and account creation. Existing verification, reset and verified download gating remain. Google is hidden during password reset. Three Node/Chrome test groups passed with mocked authentication, including Google success, unverified-account gating, blocked popups and disabled-provider errors. Read-only Firebase checks confirmed project number 618833204591, authorized nexus-notes.net, and an HTTP 200 Google authorization URI response. No real Google account was signed in, created or changed. Real Google popup completion and Mac browser acceptance remain pending. No desktop data, app versions or existing Firebase accounts changed.

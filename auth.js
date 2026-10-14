@@ -3,7 +3,7 @@
 const $=id=>document.getElementById(id);
 let authClient,mode='login',busy=false,resetCode=null;
 function showStatus(message,error=false){$('status').textContent=message;$('status').classList.toggle('error',error);}
-function setMode(next){mode=next;const signup=next==='signup',reset=next==='reset',forgot=next==='forgot';$('account-title').textContent=signup?'A space of your own.':reset?'A fresh password.':forgot?'Let’s get you back in.':'Welcome back.';$('account-intro').textContent=signup?'Create an account to get Nexus Notes for your computer.':reset?'Choose a new password for your website account.':forgot?'We’ll email you a link to reset your password.':'Sign in to find your Nexus Notes downloads.';$('submit').textContent=signup?'Create account ↗':reset?'Save password':forgot?'Send reset link':'Log in ↗';$('email-field').hidden=reset;$('email').required=!reset;$('password-field').hidden=forgot;$('password').required=!forgot;$('password').autocomplete=signup||reset?'new-password':'current-password';$('password').minLength=signup||reset?8:1;$('show-password-label').hidden=forgot;$('signup-note').hidden=!signup;$('account-prompt').hidden=!signup;$('switch-mode').textContent=signup?'Log in':'Create an account';$('forgot').hidden=forgot||reset;$('resend').hidden=true;showStatus('');}
+function setMode(next){mode=next;const signup=next==='signup',reset=next==='reset',forgot=next==='forgot';$('account-title').textContent=signup?'A space of your own.':reset?'A fresh password.':forgot?'Let’s get you back in.':'Welcome back.';$('account-intro').textContent=signup?'Create an account to get Nexus Notes for your computer.':reset?'Choose a new password for your website account.':forgot?'We’ll email you a link to reset your password.':'Sign in to find your Nexus Notes downloads.';$('submit').textContent=signup?'Create account ↗':reset?'Save password':forgot?'Send reset link':'Log in ↗';$('email-field').hidden=reset;$('email').required=!reset;$('password-field').hidden=forgot;$('password').required=!forgot;$('password').autocomplete=signup||reset?'new-password':'current-password';$('password').minLength=signup||reset?8:1;$('show-password-label').hidden=forgot;$('signup-note').hidden=!signup;$('google-option').hidden=forgot||reset;$('account-prompt').hidden=!signup;$('switch-mode').textContent=signup?'Log in':'Create an account';$('forgot').hidden=forgot||reset;$('resend').hidden=true;showStatus('');}
 
 const emailSettings=()=>({url:new URL('account.html',location.href).href});
 function authMessage(error){
@@ -13,6 +13,12 @@ function authMessage(error){
   'auth/wrong-password':'Invalid login credentials.',
   'auth/too-many-requests':'Too many attempts. Please wait before trying again.',
   'auth/network-request-failed':'Could not reach account services. Check your connection and try again.',
+  'auth/popup-closed-by-user':'Google sign-in was cancelled. Try again or use your email and password.',
+  'auth/cancelled-popup-request':'Google sign-in was cancelled. Please try again.',
+  'auth/popup-blocked':'Your browser blocked the Google sign-in window. Allow pop-ups for this website and try again.',
+  'auth/operation-not-allowed':'Google sign-in is not enabled for this website yet. Please use email and password.',
+  'auth/unauthorized-domain':'Google sign-in is not configured for this website address. Please use email and password.',
+  'auth/account-exists-with-different-credential':'This email already uses another sign-in method. Log in using that method.',
   'auth/expired-action-code':'This email link has expired. Request a new one.',
   'auth/invalid-action-code':'This email link is invalid or has already been used. Request a new one.'
  };
@@ -43,6 +49,7 @@ async function startAuth(){
   await authClient.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
   const user=await initialUser();
   if(document.body.dataset.page==='account'){
+   $('google-signin').addEventListener('click',signInWithGoogle);
    setMode(new URLSearchParams(location.search).get('mode')==='signup'?'signup':'login');
    $('show-password').addEventListener('change',event=>$('password').type=event.target.checked?'text':'password');
    $('switch-mode').addEventListener('click',()=>{resetCode=null;setMode(mode==='signup'?'login':'signup');});
@@ -115,5 +122,22 @@ async function submitAccount(event){
   }
  }catch(error){showStatus(authMessage(error),true);}
  finally{busy=false;$('submit').disabled=false;}
+}
+async function signInWithGoogle(){
+ if(busy)return;
+ busy=true;$('google-signin').disabled=true;if($('submit'))$('submit').disabled=true;
+ showStatus('Opening Google sign-in...');
+ try{
+  const provider=new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:'select_account'});
+  const {user}=await authClient.signInWithPopup(provider);
+  await user.reload();await user.getIdToken(true);
+  if(!user.emailVerified){
+   if($('resend'))$('resend').hidden=false;
+   showStatus('Verify your email before accessing downloads.',true);return;
+  }
+  location.assign('downloads.html');
+ }catch(error){showStatus(authMessage(error),true);}
+ finally{busy=false;$('google-signin').disabled=false;if($('submit'))$('submit').disabled=false;}
 }
 startAuth();
